@@ -1,0 +1,81 @@
+:root {
+  --bg: #0b0c10;
+  --text: #e9eef5;
+  --muted: #a9b4c2;
+  --card: rgba(255,255,255,0.06);
+  --cardHover: rgba(255,255,255,0.10);
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: radial-gradient(1200px 800px at 20% 0%, rgba(255,255,255,0.08), transparent 60%),
+              radial-gradient(1200px 800px at 80% 10%, rgba(255,255,255,0.06), transparent 55%),
+              var(--bg);
+  color: var(--text);
+}
+
+header, footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 18px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 18px 30px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tile {
+  display: block;
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.tile:hover {
+  background: var(--cardHover);
+  transform: translateY(-2px);
+}
+
+.tile img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.02) contrast(1.03);
+  transition: transform 250ms ease, filter 250ms ease;
+}
+
+.tile:hover img {
+  transform: scale(1.03);
+  filter: saturate(1.08) contrast(1.06);
+}
+
+footer {
+  color: var(--muted);
+  font-size: 13px;
+}

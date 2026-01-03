@@ -14,15 +14,36 @@
   </header>
 
 <main class="grid" id="grid"></main>
-
 <script>
+  const grid = document.getElementById("grid");
+
+  const lightbox = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lbImg");
+  const lbCap = document.getElementById("lbCap");
+  const lbClose = document.getElementById("lbClose");
+
+  function openLightbox(p) {
+    lbImg.src = p.src;
+    lbImg.alt = p.title || "";
+    lbCap.textContent = [p.title, p.date, p.camera, p.location].filter(Boolean).join(" • ");
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("no-scroll");
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    lbImg.src = "";
+    document.body.classList.remove("no-scroll");
+  }
+
   async function loadPhotos() {
     const res = await fetch("photos.json", { cache: "no-store" });
     const photos = await res.json();
 
-    const grid = document.getElementById("grid");
-    grid.innerHTML = photos.map(p => `
-      <a class="tile" href="${p.src}" target="_blank" rel="noopener">
+    grid.innerHTML = photos.map((p, i) => `
+      <a class="tile" href="${p.src}" data-i="${i}">
         <img src="${p.src}" alt="${p.title || ""}">
         <div class="meta">
           <div class="meta-title">${p.title || ""}</div>
@@ -34,16 +55,43 @@
         </div>
       </a>
     `).join("");
+
+    grid.addEventListener("click", (e) => {
+      const a = e.target.closest("a.tile");
+      if (!a) return;
+      e.preventDefault();
+      const idx = Number(a.getAttribute("data-i"));
+      openLightbox(photos[idx]);
+    });
   }
+
+  lbClose.addEventListener("click", closeLightbox);
+
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+  });
 
   loadPhotos();
 </script>
 
 
 
+
   <footer>
     <p>© <span id="year"></span> zbs</p>
   </footer>
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="Close">×</button>
+
+  <figure class="lb-figure">
+    <img class="lb-img" id="lbImg" alt="">
+    <figcaption class="lb-cap" id="lbCap"></figcaption>
+  </figure>
+</div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();

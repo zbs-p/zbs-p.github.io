@@ -122,6 +122,12 @@ header p {
   font-size: 12px;
 }
 
+/* Footer */
+footer {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 /* Lightbox */
 .no-scroll {
   overflow: hidden;
@@ -130,7 +136,7 @@ header p {
 .lightbox {
   position: fixed;
   inset: 0;
-  display: none; /* critical: hidden by default */
+  display: none; /* hidden by default */
   place-items: center;
   padding: 20px;
   background: rgba(0,0,0,0.86);
@@ -159,4 +165,31 @@ header p {
 }
 
 .lb-cap {
-  color: rgba(23
+  color: rgba(233,238,245,0.85);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Close button: hidden unless lightbox is open (fixes stray X) */
+.lb-close {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  color: #e9eef5;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.lightbox.open .lb-close {
+  display: block;
+}
+
+.lb-close:hover {
+  background: rgba(255,255,255,0.16);
+}

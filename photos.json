@@ -1,0 +1,16 @@
+[
+  {
+    "src": "photos/001.jpg",
+    "title": "Morning Light",
+    "date": "2026-01-03",
+    "camera": "Canon R6",
+    "location": "New York City"
+  },
+  {
+    "src": "photos/002.jpg",
+    "title": "Rain on Glass",
+    "date": "2026-01-01",
+    "camera": "Fujifilm X100V",
+    "location": "Chicago"
+  }
+]

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>zbs</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header>
+    <h1>zbs</h1>
+    <p>photography</p>
+  </header>
+
+  <main class="grid">
+    <!-- We will add your real photo filenames here next -->
+    <a class="tile" href="photos/001.jpg"><img src="photos/001.jpg" alt="Photo 1"></a>
+    <a class="tile" href="photos/002.jpg"><img src="photos/002.jpg" alt="Photo 2"></a>
+    <a class="tile" href="photos/003.jpg"><img src="photos/003.jpg" alt="Photo 3"></a>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> zbs</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

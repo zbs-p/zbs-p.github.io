@@ -13,12 +13,31 @@
     <p>photography</p>
   </header>
 
-  <main class="grid">
-    <!-- We will add your real photo filenames here next -->
-    <a class="tile" href="photos/001.jpg"><img src="photos/001.jpg" alt="Photo 1"></a>
-    <a class="tile" href="photos/002.jpg"><img src="photos/002.jpg" alt="Photo 2"></a>
-    <a class="tile" href="photos/003.jpg"><img src="photos/003.jpg" alt="Photo 3"></a>
-  </main>
+<main class="grid" id="grid"></main>
+
+<script>
+  async function loadPhotos() {
+    const res = await fetch("photos.json", { cache: "no-store" });
+    const photos = await res.json();
+
+    const grid = document.getElementById("grid");
+    grid.innerHTML = photos.map(p => `
+      <a class="tile" href="${p.src}" target="_blank" rel="noopener">
+        <img src="${p.src}" alt="${p.title || ""}">
+        <div class="meta">
+          <div class="meta-title">${p.title || ""}</div>
+          <div class="meta-row">
+            <span>${p.date || ""}</span>
+            <span>${p.camera || ""}</span>
+          </div>
+        </div>
+      </a>
+    `).join("");
+  }
+
+  loadPhotos();
+</script>
+
 
   <footer>
     <p>© <span id="year"></span> zbs</p>

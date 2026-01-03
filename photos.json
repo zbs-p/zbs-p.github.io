@@ -1,16 +1,24 @@
 [
   {
     "src": "photos/001.jpg",
-    "title": "Morning Light",
-    "date": "2026-01-03",
-    "camera": "Canon R6",
-    "location": "New York City"
+    "title": "Castle",
+    "date": "2025-08-09",
+    "camera": "Olympus Trip 35",
+    "location": "Edinburgh"
   },
   {
     "src": "photos/002.jpg",
-    "title": "Rain on Glass",
-    "date": "2026-01-01",
-    "camera": "Fujifilm X100V",
-    "location": "Chicago"
+    "title": "Coo",
+    "date": "2026-08-14",
+    "camera": "Olympus Trip 35",
+    "location": "Doolin"
+  }
+  ,
+  {
+    "src": "photos/002.jpg",
+    "title": "Canal",
+    "date": "2026-07-26",
+    "camera": "Olympus Trip 35",
+    "location": "Pocasset"
   }
 ]

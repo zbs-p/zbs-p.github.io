@@ -3,98 +3,136 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>zbs</title>
+  <title>ZBS</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <header>
-    <h1>zbs</h1>
+    <h1>ZBS</h1>
     <p>photography</p>
   </header>
 
-<main class="grid" id="grid"></main>
-<script>
-  const grid = document.getElementById("grid");
-
-  const lightbox = document.getElementById("lightbox");
-  const lbImg = document.getElementById("lbImg");
-  const lbCap = document.getElementById("lbCap");
-  const lbClose = document.getElementById("lbClose");
-
-  function openLightbox(p) {
-    lbImg.src = p.src;
-    lbImg.alt = p.title || "";
-    lbCap.textContent = [p.title, p.date, p.camera, p.location].filter(Boolean).join(" • ");
-    lightbox.classList.add("open");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.classList.add("no-scroll");
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove("open");
-    lightbox.setAttribute("aria-hidden", "true");
-    lbImg.src = "";
-    document.body.classList.remove("no-scroll");
-  }
-
-  async function loadPhotos() {
-    const res = await fetch("photos.json", { cache: "no-store" });
-    const photos = await res.json();
-
-    grid.innerHTML = photos.map((p, i) => `
-      <a class="tile" href="${p.src}" data-i="${i}">
-        <img src="${p.src}" alt="${p.title || ""}">
-        <div class="meta">
-          <div class="meta-title">${p.title || ""}</div>
-          <div class="meta-row">
-            <span>${p.date || ""}</span>
-            <span>${p.camera || ""}</span>
-            <span>${p.location || ""}</span>
-          </div>
-        </div>
-      </a>
-    `).join("");
-
-    grid.addEventListener("click", (e) => {
-      const a = e.target.closest("a.tile");
-      if (!a) return;
-      e.preventDefault();
-      const idx = Number(a.getAttribute("data-i"));
-      openLightbox(photos[idx]);
-    });
-  }
-
-  lbClose.addEventListener("click", closeLightbox);
-
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLightbox();
-  });
-
-  loadPhotos();
-</script>
-
-
-
+  <main class="wrap">
+    <div id="status" class="status" aria-live="polite"></div>
+    <section class="grid" id="grid" aria-label="Photo grid"></section>
+  </main>
 
   <footer>
     <p>© <span id="year"></span> zbs</p>
   </footer>
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <button class="lb-close" id="lbClose" aria-label="Close">×</button>
 
-  <figure class="lb-figure">
-    <img class="lb-img" id="lbImg" alt="">
-    <figcaption class="lb-cap" id="lbCap"></figcaption>
-  </figure>
-</div>
+  <!-- Lightbox (hidden by default) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <button class="lb-close" id="lbClose" aria-label="Close">×</button>
+
+    <figure class="lb-figure">
+      <img class="lb-img" id="lbImg" alt="" />
+      <figcaption class="lb-cap" id="lbCap"></figcaption>
+    </figure>
+  </div>
 
   <script>
+    // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    const grid = document.getElementById("grid");
+    const statusEl = document.getElementById("status");
+
+    const lightbox = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lbImg");
+    const lbCap = document.getElementById("lbCap");
+    const lbClose = document.getElementById("lbClose");
+
+    function showStatus(msg) {
+      statusEl.textContent = msg;
+      statusEl.style.display = msg ? "block" : "none";
+    }
+
+    function openLightbox(p) {
+      lbImg.src = p.src;
+      lbImg.alt = p.title || "";
+      lbCap.textContent = [p.title, p.date, p.camera, p.location].filter(Boolean).join(" • ");
+
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("no-scroll");
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lbImg.src = "";
+      lbCap.textContent = "";
+      document.body.classList.remove("no-scroll");
+    }
+
+    lbClose.addEventListener("click", closeLightbox);
+
+    // Close when clicking the dark background (not the image)
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Close on ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeLightbox();
+    });
+
+    async function loadPhotos() {
+      try {
+        showStatus("");
+
+        const res = await fetch("photos.json", { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("photos.json not found or not accessible.");
+        }
+
+        const photos = await res.json();
+        if (!Array.isArray(photos)) {
+          throw new Error("photos.json must be an array.");
+        }
+
+        if (photos.length === 0) {
+          showStatus("No photos yet. Add images to /photos and entries to photos.json.");
+          grid.innerHTML = "";
+          return;
+        }
+
+        grid.innerHTML = photos.map((p, i) => `
+          <a class="tile" href="${p.src}" data-i="${i}">
+            <img src="${p.src}" alt="${p.title || ""}" loading="lazy">
+            <div class="meta">
+              <div class="meta-title">${p.title || ""}</div>
+              <div class="meta-row">
+                ${p.date ? `<span>${p.date}</span>` : ``}
+                ${p.camera ? `<span>${p.camera}</span>` : ``}
+                ${p.location ? `<span>${p.location}</span>` : ``}
+              </div>
+            </div>
+          </a>
+        `).join("");
+
+        grid.addEventListener("click", (e) => {
+          const a = e.target.closest("a.tile");
+          if (!a) return;
+          e.preventDefault();
+
+          const idx = Number(a.getAttribute("data-i"));
+          const p = photos[idx];
+          if (!p || !p.src) return;
+
+          openLightbox(p);
+        });
+
+      } catch (err) {
+        console.error(err);
+        showStatus("Could not load photos. Check photos.json formatting and file paths.");
+        grid.innerHTML = "";
+      }
+    }
+
+    loadPhotos();
   </script>
 </body>
 </html>

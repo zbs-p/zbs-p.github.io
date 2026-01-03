@@ -79,3 +79,38 @@ footer {
   color: var(--muted);
   font-size: 13px;
 }
+
+.tile {
+  position: relative;
+}
+
+.meta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.70), rgba(0,0,0,0.0) 60%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.tile:hover .meta {
+  opacity: 1;
+}
+
+.meta-title {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.meta-row {
+  margin-top: 6px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: rgba(233,238,245,0.85);
+  font-size: 12px;
+}

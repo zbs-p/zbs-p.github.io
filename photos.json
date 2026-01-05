@@ -27,5 +27,19 @@
     "date": "2026-07-26",
     "camera": "Olympus Trip 35",
     "location": "Edinburgh"
+  } ,
+  {
+    "src": "photos/005.jpg",
+    "title": "Beach",
+    "date": "2026-11-28",
+    "camera": "Nikkormat EL",
+    "location": "Rockaway"
+  },
+  {
+    "src": "photos/006.jpg",
+    "title": "Walkway",
+    "date": "2026-11-28",
+    "camera": "Nikkormat EL",
+    "location": "Rockaway"
   }
 ]

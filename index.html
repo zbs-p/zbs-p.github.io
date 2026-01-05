@@ -52,7 +52,7 @@
     function openLightbox(p) {
       lbImg.src = p.src;
       lbImg.alt = p.title || "";
-      lbCap.textContent = [p.title, p.date, p.camera, p.location].filter(Boolean).join(" • ");
+      lbCap.textContent = [p.title, p.date, p.location].filter(Boolean).join(" • ");
 
       lightbox.classList.add("open");
       lightbox.setAttribute("aria-hidden", "false");
